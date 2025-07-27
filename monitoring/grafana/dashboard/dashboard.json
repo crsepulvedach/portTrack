@@ -1,0 +1,34 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "example_dashboard",
+    "title": "PortTrack Metrics",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "API Response Time",
+        "targets": [
+          {
+            "expr": "api_response_time_seconds",
+            "legendFormat": "{{method}}",
+            "refId": "A"
+          }
+        ],
+        "datasource": "Prometheus"
+      },
+      {
+        "type": "graph",
+        "title": "CPU Usage",
+        "targets": [
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total[5m])) by (instance)",
+            "legendFormat": "{{instance}}",
+            "refId": "B"
+          }
+        ],
+        "datasource": "Prometheus"
+      }
+    ]
+  },
+  "overwrite": false
+}

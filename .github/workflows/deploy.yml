@@ -1,0 +1,39 @@
+name: Continuous Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [dev, test, staging, prod]  # Definir los ambientes
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-west-2'  # Cambia a tu región
+
+      - name: Create Application Bundle
+        run: |
+          zip -r app.zip path/to/your/app  # Cambia esto según tu aplicación
+
+      - name: Upload Application Bundle to S3
+        run: |
+          aws s3 cp app.zip s3://your-bucket-name/${{ matrix.environment }}/app.zip  # Sube a la carpeta del entorno
+
+      - name: Deploy Application using AWS CodeDeploy
+        run: |
+          aws deploy create-deployment \
+            --application-name your-application-name \
+            --s3-location bucket=your-bucket-name,key=${{ matrix.environment }}/app.zip,bundleType=zip \
+            --deployment-group-name your-deployment-group-${{ matrix.environment }} \  # Grupo de despliegue para cada entorno
+            --deployment-config-name CodeDeployDefault.OneAtATime  # Cambia según la estrategia deseada

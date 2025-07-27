@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s  # Intervalo de recolección de métricas
+
+scrape_configs:
+  - job_name: 'porttrack'
+    static_configs:
+      - targets: ['ec2-instance-public-ip:9100']  # IP pública de la instancia donde corre el exporter
