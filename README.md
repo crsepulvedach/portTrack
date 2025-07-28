@@ -19,7 +19,7 @@ graph TD;
     A[Usuario Final] -->|Acceso via Web| B[Load Balancer]
     B -->|Redirige tráfico| C[EC2 Instances]
     C -->|Se comunica con| D[Microservicios]
-    D -->|Almacena datos en| E[Base de Datos (RDS)]
+    D -->|Almacena datos en| E[Base de Datos -RDS]
     C -->|Monitorea estado en| F[Prometheus]
     F -->|Visualiza métricas en| G[Grafana]
     H[GitHub Actions] -->|Despliega a| C
